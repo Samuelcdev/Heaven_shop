@@ -28,7 +28,7 @@ export const login = async (req, res) => {
 
     try {
         const data = await authService.loginUser(req.body);
-        return res.status(201).json({
+        return res.status(200).json({
             message: "Login successful",
             user: data.user,
             token: data.token,
