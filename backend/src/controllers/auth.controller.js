@@ -1,7 +1,7 @@
 import { validationResult } from "express-validator";
 import * as authService from "../services/auth.service.js";
 
-export const register = async (req, res) => {
+export const register = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() });
@@ -14,14 +14,11 @@ export const register = async (req, res) => {
             token: data.token,
         });
     } catch (err) {
-        const status = err.status || 500;
-        return res
-            .status(status)
-            .json({ error: err.message || "Server Error" });
+        next(err);
     }
 };
 
-export const login = async (req, res) => {
+export const login = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() });
@@ -34,9 +31,6 @@ export const login = async (req, res) => {
             token: data.token,
         });
     } catch (err) {
-        const status = err.status || 500;
-        return res
-            .status(status)
-            .json({ error: err.message || "Server Error" });
+        next(err);
     }
 };
