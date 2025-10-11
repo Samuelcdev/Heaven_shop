@@ -64,3 +64,19 @@ export const updateUser = async (req, res) => {
             .json({ error: err.message || "Internal server error" });
     }
 };
+
+export const deleteUser = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userDeleted = await userService.deleteUser(id);
+        return res
+            .status(200)
+            .json({ message: "User deleted", user: userDeleted });
+    } catch (err) {
+        console.error("Error deleting user", err);
+        const status = err.status || 500;
+        return res
+            .status(status)
+            .json({ error: err.message || "Internal server error" });
+    }
+};

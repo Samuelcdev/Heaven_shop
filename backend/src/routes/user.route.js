@@ -52,5 +52,6 @@ router.put(
     ],
     userCtrl.updateUser
 );
+router.delete("/delete/:id", verifyToken, permit("admin"), userCtrl.deleteUser);
 
 export default router;

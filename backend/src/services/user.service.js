@@ -141,3 +141,19 @@ export const updateUser = async (id, payload) => {
     delete userJson.password_user;
     return userJson;
 };
+
+export const deleteUser = async (id) => {
+    const user = await User.findByPk(id);
+    if (!user) {
+        const err = new Error("User not found");
+        err.status = 404;
+        throw err;
+    }
+
+    user.status_user = "inactive";
+    await user.save();
+
+    const userJson = user.toJSON();
+    delete userJson.password_user;
+    return userJson;
+};
