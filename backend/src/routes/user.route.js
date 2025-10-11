@@ -14,7 +14,10 @@ router.post(
     permit("admin"),
     [
         body("name_user").trim().notEmpty().withMessage("Name user required"),
-        body("email_user").trim().isEmail().withMessage("Valid main required"),
+        body("email_user")
+            .trim()
+            .isEmail()
+            .withMessage("Valid format is required"),
         body("password_user")
             .isLength({ min: 6 })
             .withMessage("Password min 6 chars"),
@@ -25,6 +28,29 @@ router.post(
         body("roleName").optional().isString(),
     ],
     userCtrl.createUser
+);
+router.put(
+    "/:id",
+    verifyToken,
+    permit("admin", "client"),
+    [
+        body("name_user")
+            .optional()
+            .trim()
+            .notEmpty()
+            .withMessage("Name user required"),
+        body("email_user")
+            .optional()
+            .isEmail()
+            .withMessage("Valid format is required"),
+        body("password_user")
+            .optional()
+            .isLength({ min: 6 })
+            .withMessage("Password min 6 chars"),
+        body("status_bar").optional().isIn(["active", "inactive"]),
+        body("roleName").optional().isString(),
+    ],
+    userCtrl.updateUser
 );
 
 export default router;

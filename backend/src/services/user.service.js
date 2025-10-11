@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Role from "../models/Role.js";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
+import { Op, where } from "sequelize";
 
 dotenv.config();
 
@@ -84,5 +85,59 @@ export const createUser = async (payload) => {
     const userJson = user.toJSON();
     delete userJson.password_user;
 
+    return userJson;
+};
+
+export const updateUser = async (id, payload) => {
+    const user = await User.findByPk(id);
+    if (!user) {
+        const err = new Error("User not found");
+        err.status = 404;
+        throw err;
+    }
+
+    const { name_user, email_user, password_user, status_user, roleName } =
+        payload;
+
+    if (email_user) {
+        const existing = await User.findOne({
+            where: { email_user, id_user: { [Op.ne]: id } },
+        });
+        if (existing) {
+            const err = new Error("Email already in use");
+            err.status = 409;
+            throw err;
+        }
+    }
+
+    let role = null;
+    if (roleName) {
+        role = await Role.findOne({ where: { name_role: roleName } });
+        if (!role) {
+            const err = new Error("Role not found");
+            err.status = 404;
+            throw err;
+        }
+    }
+
+    if (password_user) {
+        payload.password_user = await bcrypt.hash(password_user, 10);
+    }
+
+    await User.update(
+        {
+            name_user: name_user ?? user.name_user,
+            email_user: email_user ?? user.email_user,
+            password_user: payload.password_user ?? user.password_user,
+            status_user: status_user ?? user.status_user,
+            id_role: role ? role.id_role : user.id_role,
+        },
+        { where: { id_user: id } }
+    );
+
+    const updateUser = await User.findByPk(id);
+
+    const userJson = updateUser.toJSON();
+    delete userJson.password_user;
     return userJson;
 };
