@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `heavenshoptestdb`.`products` (
   `image_product` VARCHAR(255) NULL DEFAULT NULL,
   `id_category` INT(11) NOT NULL,
   PRIMARY KEY (`id_product`),
-  INDEX `fk_products_categories` (`id_category` ASC) VISIBLE,
+  INDEX `fk_products_categories` (`id_category` ASC),
   CONSTRAINT `fk_products_categories`
     FOREIGN KEY (`id_category`)
     REFERENCES `heavenshoptestdb`.`categories` (`id_category`)
@@ -74,7 +74,7 @@ CREATE TABLE IF NOT EXISTS `heavenshoptestdb`.`roles` (
   `name_role` VARCHAR(50) NOT NULL,
   `description_role` VARCHAR(150) NULL DEFAULT NULL,
   PRIMARY KEY (`id_role`),
-  UNIQUE INDEX `name_role` (`name_role` ASC) VISIBLE)
+  UNIQUE INDEX `name_role` (`name_role` ASC))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
@@ -95,8 +95,8 @@ CREATE TABLE IF NOT EXISTS `heavenshoptestdb`.`users` (
   `created_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP(),
   `updated_at` DATETIME NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id_user`),
-  UNIQUE INDEX `email_user` (`email_user` ASC) VISIBLE,
-  INDEX `fk_user_role` (`id_role` ASC) VISIBLE,
+  UNIQUE INDEX `email_user` (`email_user` ASC),
+  INDEX `fk_user_role` (`id_role` ASC),
   CONSTRAINT `fk_user_role`
     FOREIGN KEY (`id_role`)
     REFERENCES `heavenshoptestdb`.`roles` (`id_role`))
