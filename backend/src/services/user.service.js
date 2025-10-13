@@ -2,7 +2,7 @@ import User from "../models/User.js";
 import Role from "../models/Role.js";
 import dotenv from "dotenv";
 import bcrypt from "bcrypt";
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 
 dotenv.config();
 
@@ -38,7 +38,7 @@ export const getUserById = async (id_user) => {
 
     if (!user) {
         const err = new Error("User not found");
-        err.status = 400;
+        err.status = 404;
         throw err;
     }
 

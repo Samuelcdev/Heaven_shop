@@ -21,6 +21,10 @@ app.get("/", (req, res) => {
     res.send("Servidor Corriendo exitosamente");
 });
 
+import { swaggerUi, swaggerSpecs } from "../docs/api/swagger.js";
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
