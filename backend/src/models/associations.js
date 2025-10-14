@@ -1,5 +1,6 @@
 import User from "./User.js";
 import Role from "./Role.js";
+import RefreshToken from "./RefreshToken.js";
 
 Role.hasMany(User, {
     foreignKey: "id_role",
@@ -11,4 +12,14 @@ User.belongsTo(Role, {
     as: "role",
 });
 
-export { User, Role };
+User.hasOne(RefreshToken, {
+    foreignKey: "id_user",
+    as: "refreshToken",
+});
+
+RefreshToken.belongsTo(User, {
+    foreignKey: "id_user",
+    as: "user",
+});
+
+export { User, Role, RefreshToken };
