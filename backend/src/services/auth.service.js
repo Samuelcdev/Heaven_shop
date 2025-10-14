@@ -1,8 +1,10 @@
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 import User from "../models/User.js";
 import Role from "../models/Role.js";
+import RefreshToken from "../models/RefreshToken.js";
+import dotenv from "dotenv";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import crypto from "crypto";
 
 dotenv.config();
 
@@ -58,6 +60,57 @@ export const registerUser = async (payload) => {
     return { user: userJson, token };
 };
 
+export const refreshToken = async (refreshToken) => {
+    if (!refreshToken) {
+        const err = new Error("Missing refresh token");
+        err.status = 400;
+        throw err;
+    }
+
+    const stored = await RefreshToken.findOne({
+        where: {
+            token: refreshToken,
+        },
+        include: {
+            model: User,
+            as: "user",
+            include: {
+                model: Role,
+                as: "role",
+                attributes: ["name_role"],
+            },
+        },
+    });
+
+    if (!stored) {
+        const err = new Error("Invalid refresh token");
+        err.status = 403;
+        throw err;
+    }
+
+    if (new Date() > new Date(stored.expires_at)) {
+        await stored.destroy();
+        const err = new Error("Expired refres token");
+        err.status = 403;
+        throw err;
+    }
+
+    const payload = {
+        id_user: stored.user.id_user,
+        name_user: stored.user.name_user,
+        email_user: stored.user.email_user,
+        role: stored.user.role.name_role,
+    };
+
+    const newAccessToken = jwt.sign(payload, process.env.JWT_SECRET, {
+        expiresIn: "1h",
+    });
+
+    return {
+        accessToken: newAccessToken,
+    };
+};
+
 export const loginUser = async ({ email_user, password_user }) => {
     const user = await User.findOne({
         where: { email_user },
@@ -91,8 +144,17 @@ export const loginUser = async ({ email_user, password_user }) => {
         name: user.name_user,
     };
 
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+    const accessToken = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
         expiresIn: "1h",
+    });
+
+    const refreshToken = crypto.randomBytes(64).toString("hex");
+    const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+
+    await RefreshToken.upsert({
+        id_user: user.id_user,
+        token: refreshToken,
+        expires_at: expiresAt,
     });
 
     return {
@@ -102,6 +164,31 @@ export const loginUser = async ({ email_user, password_user }) => {
             email_user: user.email_user,
             role: user.role.name_role,
         },
-        token,
+        accessToken,
+        refreshToken,
+    };
+};
+
+export const logout = async (refreshToken) => {
+    if (!refreshToken) {
+        const err = new Error("Missing refresh token");
+        err.status = 400;
+        throw err;
+    }
+
+    const stored = await RefreshToken.findOne({
+        where: { token: refreshToken },
+    });
+
+    if (!stored) {
+        const err = new Error("Token not found or already removed");
+        err.status = 404;
+        throw err;
+    }
+
+    await stored.destroy();
+
+    return {
+        message: "Logout succesful, token deleted",
     };
 };

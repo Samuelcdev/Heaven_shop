@@ -31,4 +31,8 @@ router.post(
     authCtrl.login
 );
 
+router.post("/logout", authCtrl.logout);
+
+router.post("/refresh", authCtrl.refreshToken);
+
 export default router;

@@ -28,8 +28,34 @@ export const login = async (req, res, next) => {
         return res.status(200).json({
             message: "Login successful",
             user: data.user,
-            token: data.token,
+            accesToken: data.accessToken,
+            refreshToken: data.refreshToken,
         });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const refreshToken = async (req, res, next) => {
+    try {
+        const { refreshToken } = req.body;
+        const data = await authService.refreshToken(refreshToken);
+
+        return res.status(200).json({
+            message: "Access token refreshed",
+            accesToken: data.accessToken,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const logout = async (req, res, next) => {
+    try {
+        const { refreshToken } = req.body;
+        const result = await authService.logout(refreshToken);
+
+        return res.status(200).json({ result });
     } catch (err) {
         next(err);
     }
