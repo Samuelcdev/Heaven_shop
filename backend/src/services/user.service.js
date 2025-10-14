@@ -1,13 +1,38 @@
+/**
+ * -------------------------------------------------------------
+ * File: user.service.js
+ * Author: Samuel Useche
+ * Description:
+ *   Contiene la logica de usuarios(obtener, crear, actualizar, eliminar)
+ *   utilizando jwt, bcrypt y { Op } de sequelize
+ *
+ * Dependencies:
+ *   - bcrypt: para encriptar contraseñas
+ *   - jwt: para generar tokens
+ *   - crypto: para generar tokens de refresco aleatorios
+ *
+ * Model:
+ *   - Role: modelo de roles
+ *   - User: modelo para usuarios
+ *   - RefreshToken: model de tokens de actualización
+ *
+ * Notes:
+ *   Este servicio no maneja respuestas HTTP directamente.
+ *   Se comunica con los controladores para retornar resultados.
+ * -------------------------------------------------------------
+ */
 import User from "../models/User.js";
 import Role from "../models/Role.js";
-import dotenv from "dotenv";
 import bcrypt from "bcrypt";
 import { Op } from "sequelize";
 
-dotenv.config();
-
 const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 
+/**
+ * Endpoint: GET /api/users/
+ * Maneja la extracción de los usuarios.
+ * Genera la información de los usuarios
+ */
 export const getAllUsers = async () => {
     const users = await User.findAll({
         attributes: [
@@ -26,6 +51,12 @@ export const getAllUsers = async () => {
     return users;
 };
 
+/**
+ * Endpoint: GET /api/users/:id
+ * Maneja la extracción de usuario por id.
+ * Valida que el usuario exista
+ * Genera la información del usuario
+ */
 export const getUserById = async (id_user) => {
     const user = await User.findByPk(id_user, {
         attributes: { exclude: ["password_user"] },
@@ -45,6 +76,11 @@ export const getUserById = async (id_user) => {
     return user;
 };
 
+/**
+ * Endpoint: GET /api/users/paginated
+ * Maneja la extracción de los usuarios paginados.
+ * Genera un maximo de 10 usuarios por pagina.
+ */
 export const getPaginatedUsers = async (page = 1, limit = 10) => {
     const offset = (page - 1) * limit;
 
@@ -74,6 +110,13 @@ export const getPaginatedUsers = async (page = 1, limit = 10) => {
     };
 };
 
+/**
+ * Endpoint: POST /api/users/
+ * Maneja la creación de un usuario.
+ * Valida que el correo no este en uso
+ * Valida existencia del rol
+ * Genera la informacion del usuario sin la contraseña
+ */
 export const createUser = async (payload) => {
     const { name_user, email_user, password_user, id_role, roleName } = payload;
 
@@ -117,6 +160,14 @@ export const createUser = async (payload) => {
     return userJson;
 };
 
+/**
+ * Endpoint: PUT /api/users/
+ * Maneja la actualización de un usuario.
+ * Valida existencia del usuario
+ * Valida que el correo no este en uso
+ * Valida existencia del rol
+ * Genera la informacion del usuario actualizado
+ */
 export const updateUser = async (id, payload) => {
     const user = await User.findByPk(id);
     if (!user) {
@@ -171,6 +222,13 @@ export const updateUser = async (id, payload) => {
     return userJson;
 };
 
+/**
+ * Endpoint: DELETE /api/users/
+ * Maneja la desactivación de un usuario.
+ * Valida existencia del usuario
+ * Cambia el estado del usuario a inactivo
+ * Genera la informacion del usuario sin la contraseña
+ */
 export const deleteUser = async (id) => {
     const user = await User.findByPk(id);
     if (!user) {
