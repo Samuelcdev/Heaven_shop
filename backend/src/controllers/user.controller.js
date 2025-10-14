@@ -1,4 +1,4 @@
-import { body, validationResult } from "express-validator";
+import { validationResult } from "express-validator";
 import * as userService from "../services/user.service.js";
 
 export const getUsers = async (req, res, next) => {
@@ -15,6 +15,18 @@ export const getUserByPk = async (req, res, next) => {
         const { id } = req.params;
         const user = await userService.getUserById(id);
         return res.status(200).json(user);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export const getPaginatedUsers = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page || 1);
+        const limit = parseInt(req.query.limit || 10);
+
+        const usersPaginated = await userService.getPaginatedUsers(page, limit);
+        return res.status(200).json(usersPaginated);
     } catch (err) {
         next(err);
     }

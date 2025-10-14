@@ -37,6 +37,38 @@ router.get("/", verifyToken, permit("admin"), userCtrl.getUsers);
 
 /**
  * @swagger
+ * /api/users/paginated:
+ *   get:
+ *     summary: Get paginated users
+ *     tags: [Users]
+ *     security:
+ *      - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *         description: Page number
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           example: 10
+ *         description: Number of users per page
+ *     responses:
+ *       200:
+ *         description: Paginated users list
+ */
+router.get(
+    "/paginated",
+    verifyToken,
+    permit("admin"),
+    userCtrl.getPaginatedUsers
+);
+
+/**
+ * @swagger
  * /api/users/{id}:
  *   get:
  *     summary: Get a user by ID
@@ -60,7 +92,12 @@ router.get("/", verifyToken, permit("admin"), userCtrl.getUsers);
  *       404:
  *         description: User not found
  */
-router.get("/:id", verifyToken, permit("admin", "client"), userCtrl.getUserByPk);
+router.get(
+    "/:id",
+    verifyToken,
+    permit("admin", "client"),
+    userCtrl.getUserByPk
+);
 
 /**
  * @swagger

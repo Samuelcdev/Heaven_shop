@@ -45,6 +45,35 @@ export const getUserById = async (id_user) => {
     return user;
 };
 
+export const getPaginatedUsers = async (page = 1, limit = 10) => {
+    const offset = (page - 1) * limit;
+
+    const { count, rows: users } = await User.findAndCountAll({
+        attributes: [
+            "id_user",
+            "name_user",
+            "email_user",
+            "status_user",
+            "created_at",
+        ],
+        include: {
+            model: Role,
+            as: "role",
+            attributes: ["name_role"],
+        },
+        limit,
+        offset,
+        order: [["created_at", "DESC"]],
+    });
+
+    return {
+        totalUsers: count,
+        totalPages: Math.ceil(count, limit),
+        currentPage: page,
+        users,
+    };
+};
+
 export const createUser = async (payload) => {
     const { name_user, email_user, password_user, id_role, roleName } = payload;
 
