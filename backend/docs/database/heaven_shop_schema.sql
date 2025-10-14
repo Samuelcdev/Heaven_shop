@@ -104,6 +104,27 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+-- -----------------------------------------------------
+-- Table `heavenshoptestdb`.`refreshTokens`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `heavenshoptestdb`.`refreshT_tokens` ;
+
+CREATE TABLE IF NOT EXISTS `heavenshoptestdb`.`refresh_tokens` (
+  `id_token` INT(11) NOT NULL AUTO_INCREMENT,
+  `id_user` INT(11) NOT NULL,
+  `token` VARCHAR(255) NOT NULL,
+  `expires_at` DATETIME NOT NULL,
+  PRIMARY KEY(`id_token`),
+  INDEX `fk_user_refresh_idx` (`id_user` ASC),
+  CONSTRAINT `fk_user_refreshToken`
+    FOREIGN KEY (`id_user`)
+    REFERENCES `heavenshoptestdb`.`users` (`id_user`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
