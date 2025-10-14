@@ -1,10 +1,34 @@
-import User from "../models/User.js";
-import Role from "../models/Role.js";
-import RefreshToken from "../models/RefreshToken.js";
-import dotenv from "dotenv";
+/**
+ * -------------------------------------------------------------
+ * File: auth.service.js
+ * Author: Samuel Useche
+ * Description:
+ *   Contiene la lógica de autenticación (registro, login, refresh, logout)
+ *   utilizando JWT y Refresh Tokens con almacenamiento en base de datos.
+ *
+ * Dependencies:
+ *   - bcrypt: para encriptar contraseñas
+ *   - jwt: para generar tokens
+ *   - crypto: para generar tokens de refresco aleatorios
+ *   - dotenv: para variables de entorno
+ *
+ * Model:
+ *   - Role: modelo de roles
+ *   - User: modelo para usuarios
+ *   - RefreshToken: model de tokens de actualización
+ *
+ * Notes:
+ *   Este servicio no maneja respuestas HTTP directamente.
+ *   Se comunica con los controladores para retornar resultados.
+ * -------------------------------------------------------------
+ */
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import dotenv from "dotenv";
+import User from "../models/User.js";
+import Role from "../models/Role.js";
+import RefreshToken from "../models/RefreshToken.js";
 
 dotenv.config();
 
@@ -12,6 +36,13 @@ const SALT_ROUNDS = parseInt(process.env.BCRYPT_SALT_ROUNDS || "10", 10);
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES = process.env.JWT_EXPIRES || "1h";
 
+/**
+ * Endpoint: POST /api/auth/register
+ * Maneja la creacion del usuario.
+ * Valida existencia de usuario en la base de datos.
+ * Valida existencia del rol.
+ * Crea el usuario y genera token de acceso.
+ */
 export const registerUser = async (payload) => {
     const { name_user, email_user, password_user, roleName } = payload;
 
@@ -60,6 +91,13 @@ export const registerUser = async (payload) => {
     return { user: userJson, token };
 };
 
+/**
+ * Endpoint: POST /api/auth/refresh
+ * Maneja el refresh token.
+ * Valida el envio del refresh token.
+ * Valida la fecha de expiracion del token.
+ * Genera el nuevo token de acceso.
+ */
 export const refreshToken = async (refreshToken) => {
     if (!refreshToken) {
         const err = new Error("Missing refresh token");
@@ -111,6 +149,12 @@ export const refreshToken = async (refreshToken) => {
     };
 };
 
+/**
+ * Endpoint: POST /api/auth/login
+ * Maneja el inicio de sesión del usuario.
+ * Valida el email y contraseña.
+ * Genera data del usuario y tokens.
+ */
 export const loginUser = async ({ email_user, password_user }) => {
     const user = await User.findOne({
         where: { email_user },
@@ -169,6 +213,12 @@ export const loginUser = async ({ email_user, password_user }) => {
     };
 };
 
+/**
+ * Endpoint: POST /api/auth/logout
+ * Maneja el cierre de sesion y la destruccion del refresh token.
+ * Valida el envio del refresh token.
+ * Genera la destruccion del refresh token
+ */
 export const logout = async (refreshToken) => {
     if (!refreshToken) {
         const err = new Error("Missing refresh token");
