@@ -140,7 +140,7 @@ export const createUser = async (payload) => {
 
     if (!role) {
         const err = new Error("Role not found");
-        err.status = 400;
+        err.status = 404;
         throw err;
     }
 
