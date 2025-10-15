@@ -3,6 +3,7 @@ import { body } from "express-validator";
 import * as userCtrl from "../controllers/user.controller.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import { permit } from "../middlewares/permit.js";
+import { canEditUser } from "../middlewares/canEditUser.js";
 
 const router = Router();
 
@@ -181,6 +182,7 @@ router.put(
     "/:id",
     verifyToken,
     permit("admin", "client"),
+    canEditUser,
     [
         body("name_user").optional().trim().notEmpty(),
         body("email_user").optional().isEmail(),
