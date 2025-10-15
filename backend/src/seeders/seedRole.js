@@ -9,9 +9,9 @@ const seedRoles = async () => {
         await sequelize.sync({ alter: true });
 
         const roles = [
-            { name_role: "admin", description: "System administrator" },
-            { name_role: "seller", description: "Manage sales and inventory" },
-            { name_role: "client", description: "Regular customer" },
+            { name_role: "admin", description_role: "System administrator" },
+            { name_role: "seller", description_role: "Manage sales and inventory" },
+            { name_role: "client", description_role: "Regular customer" },
         ];
 
         for (const role of roles) {
