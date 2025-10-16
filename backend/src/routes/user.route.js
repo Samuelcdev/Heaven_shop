@@ -197,7 +197,7 @@ router.put(
  * @swagger
  * /api/users/{id}:
  *   delete:
- *     summary: Deactivate a user
+ *     summary: Desactivate a user
  *     tags: [Users]
  *     security:
  *       - bearerAuth: []
