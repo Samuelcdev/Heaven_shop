@@ -1,4 +1,5 @@
 import express from "express";
+import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 import sequelize from "./config/database.js";
@@ -11,6 +12,10 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 dotenv.config();
 
 const app = express();
+
+app.use(
+    "/images".express.static(path.join(process.cwd(), "src/public/images"))
+);
 
 app.use(cors());
 app.use(express.json());
