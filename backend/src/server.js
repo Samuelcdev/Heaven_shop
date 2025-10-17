@@ -14,10 +14,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-    "/images",
-    express.static(path.join(process.cwd(), "src/public/images"))
-);
+app.use("/images", express.static(path.join(process.cwd(), "public/images")));
 
 app.use(cors());
 app.use(express.json());

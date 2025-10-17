@@ -58,6 +58,10 @@ router.put(
             .optional()
             .isLength({ min: 3 })
             .withMessage("Name must have at least 3 characters"),
+        body("description_product")
+            .optional()
+            .isLength({ max: 200 })
+            .withMessage("Description too long"),
         body("price_product")
             .optional()
             .isFloat({ gt: 0 })

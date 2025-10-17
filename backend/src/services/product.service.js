@@ -1,5 +1,6 @@
 import Product from "../models/Product.js";
 import Category from "../models/Category.js";
+import { Op } from "sequelize";
 
 export const getProducts = async () => {
     const products = await Product.findAll();
@@ -86,7 +87,7 @@ export const updateProduct = async (id, payload) => {
 
     if (name_product) {
         const existing = await Product.findOne({
-            where: { name_product: name_product },
+            where: { name_product: name_product, id_product: { [Op.ne]: id } },
         });
         if (existing) {
             const err = new Error("Name product already in use");
@@ -113,7 +114,7 @@ export const updateProduct = async (id, payload) => {
             description_product:
                 description_product || product.description_product,
             price_product: price_product || product.price_product,
-            status_product: status_product || product.price_product,
+            status_product: status_product || product.status_product,
             image_product: image_product || product.image_product,
         },
         {
