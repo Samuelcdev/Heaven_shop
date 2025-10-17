@@ -1,7 +1,7 @@
 -- -----------------------------------------------------
 -- Schema heavenshopdb
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `heavenshoptestsdb`
+CREATE SCHEMA IF NOT EXISTS `heavenshoptestdb`
   DEFAULT CHARACTER SET utf8mb4
   COLLATE utf8mb4_unicode_ci;
 USE `heavenshoptestdb`;
@@ -131,6 +131,3 @@ CREATE TABLE `stocks` (
 ) ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
