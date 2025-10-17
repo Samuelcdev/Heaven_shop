@@ -7,6 +7,7 @@ import "./models/associations.js";
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import categoryRoutes from "./routes/category.route.js";
+import productRoutes from "./routes/product.route.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -14,7 +15,8 @@ dotenv.config();
 const app = express();
 
 app.use(
-    "/images".express.static(path.join(process.cwd(), "src/public/images"))
+    "/images",
+    express.static(path.join(process.cwd(), "src/public/images"))
 );
 
 app.use(cors());
@@ -23,6 +25,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/product", productRoutes);
 
 app.get("/", (req, res) => {
     res.send("Servidor Corriendo exitosamente");
