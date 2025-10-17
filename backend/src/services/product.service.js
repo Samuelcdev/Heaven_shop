@@ -66,3 +66,80 @@ export const createProduct = async (payload) => {
     const productJson = product.toJSON();
     return productJson;
 };
+
+export const updateProduct = async (id, payload) => {
+    const product = await Product.findByPk(id);
+    if (!product) {
+        const err = new Error("Product not found");
+        err.status = 404;
+        throw err;
+    }
+
+    const {
+        name_product,
+        description_product,
+        price_product,
+        status_product,
+        image_product,
+        categoryName,
+    } = payload;
+
+    if (name_product) {
+        const existing = await Product.findOne({
+            where: { name_product: name_product },
+        });
+        if (existing) {
+            const err = new Error("Name product already in use");
+            err.status = 409;
+            throw err;
+        }
+    }
+
+    let category;
+    if (categoryName) {
+        category = await Category.findOne({
+            where: { name_category: categoryName },
+        });
+        if (!category) {
+            const err = new Error("Cateogry not found");
+            err.status = 404;
+            throw err;
+        }
+    }
+
+    await Product.update(
+        {
+            name_product: name_product || product.name_product,
+            description_product:
+                description_product || product.description_product,
+            price_product: price_product || product.price_product,
+            status_product: status_product || product.price_product,
+            image_product: image_product || product.image_product,
+        },
+        {
+            where: {
+                id_product: id,
+            },
+        }
+    );
+
+    const updateProduct = await Product.findByPk(id);
+
+    const productJson = updateProduct.toJSON();
+    return productJson;
+};
+
+export const deleteProduct = async (id) => {
+    const product = await Product.findByPk(id);
+    if (!product) {
+        const err = new Error("Product not found");
+        err.status = 404;
+        throw err;
+    }
+
+    product.status_product = "inactive";
+    product.save();
+
+    const productJson = product.toJSON();
+    return productJson;
+};
