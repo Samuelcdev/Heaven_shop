@@ -14,6 +14,13 @@ router.get(
 );
 
 router.get(
+    "/paginated",
+    verifyToken,
+    permit("admin", "seller"),
+    productCtrl.getPaginatedProducts
+);
+
+router.get(
     "/:id",
     verifyToken,
     permit("admin", "seller", "client"),

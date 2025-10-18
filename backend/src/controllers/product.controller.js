@@ -20,6 +20,21 @@ export const getProductByPk = async (req, res, next) => {
     }
 };
 
+export const getPaginatedProducts = async (req, res, next) => {
+    try {
+        const page = parseInt(req.query.page || 1);
+        const limit = parseInt(req.query.limit || 10);
+
+        const productsPaginated = await productService.getPaginatedProduct(
+            page,
+            limit
+        );
+        return res.status(200).json(productsPaginated);
+    } catch (err) {
+        next(err);
+    }
+};
+
 export const createProduct = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

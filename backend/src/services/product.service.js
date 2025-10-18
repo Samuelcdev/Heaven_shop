@@ -19,6 +19,36 @@ export const getProductById = async (id_product) => {
     return product;
 };
 
+export const getPaginatedProduct = async (page = 1, limit = 10) => {
+    const offset = (page - 1) * limit;
+
+    const { count, rows: products } = await Product.findAndCountAll({
+        attributes: [
+            "id_product",
+            "name_product",
+            "description_product",
+            "price_product",
+            "status_product",
+            "image_product",
+        ],
+        include: {
+            model: Category,
+            as: "category",
+            attributes: ["name_category"],
+        },
+        limit,
+        offset,
+        order: [["name_product", "ASC"]],
+    });
+
+    return {
+        totalProducts: count,
+        totalPages: Math.ceil(count, limit),
+        currentPage: page,
+        products,
+    };
+};
+
 export const createProduct = async (payload) => {
     const {
         name_product,
