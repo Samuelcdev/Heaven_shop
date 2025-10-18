@@ -101,6 +101,8 @@ CREATE TABLE `variants` (
   `color_variant` VARCHAR(50) NULL,
   `size_variant` VARCHAR(50) NULL,
   `sku_variant` VARCHAR(100) UNIQUE,
+  `price_variant` DECIMAL(10,2) NULL,
+  `status_variant` ENUM('active', 'inactive') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id_variant`),
   INDEX `fk_variant_product` (`id_product` ASC),
   CONSTRAINT `fk_variant_product`
@@ -110,6 +112,7 @@ CREATE TABLE `variants` (
     ON UPDATE CASCADE
 ) ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 
 -- -----------------------------------------------------
 -- Table `stocks`
