@@ -140,12 +140,12 @@ export const updateProduct = async (id, payload) => {
 
     await Product.update(
         {
-            name_product: name_product || product.name_product,
+            name_product: name_product ?? product.name_product,
             description_product:
-                description_product || product.description_product,
-            price_product: price_product || product.price_product,
-            status_product: status_product || product.status_product,
-            image_product: image_product || product.image_product,
+                description_product ?? product.description_product,
+            price_product: price_product ?? product.price_product,
+            status_product: status_product ?? product.status_product,
+            image_product: image_product ?? product.image_product,
         },
         {
             where: {
