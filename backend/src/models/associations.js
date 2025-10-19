@@ -3,6 +3,7 @@ import Role from "./Role.js";
 import RefreshToken from "./RefreshToken.js";
 import Category from "./Category.js";
 import Product from "./Product.js";
+import Variant from "./Variant.js";
 
 // User ↔ Role
 Role.hasMany(User, {
@@ -37,4 +38,14 @@ Product.belongsTo(Category, {
     as: "category",
 });
 
-export { User, Role, RefreshToken, Product, Category };
+Product.hasMany(Variant, {
+    foreignKey: "id_product",
+    as: "variants",
+});
+
+Variant.belongsTo(Product, {
+    foreignKey: "id_product",
+    as: "product",
+});
+
+export { User, Role, RefreshToken, Product, Category, Variant };

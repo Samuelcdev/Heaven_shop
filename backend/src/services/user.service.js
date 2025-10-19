@@ -104,7 +104,7 @@ export const getPaginatedUsers = async (page = 1, limit = 10) => {
 
     return {
         totalUsers: count,
-        totalPages: Math.ceil(count, limit),
+        totalPages: Math.ceil(count / limit),
         currentPage: page,
         users,
     };

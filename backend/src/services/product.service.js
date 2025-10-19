@@ -43,7 +43,7 @@ export const getPaginatedProduct = async (page = 1, limit = 10) => {
 
     return {
         totalProducts: count,
-        totalPages: Math.ceil(count, limit),
+        totalPages: Math.ceil(count / limit),
         currentPage: page,
         products,
     };
