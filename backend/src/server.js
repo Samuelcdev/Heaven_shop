@@ -9,6 +9,7 @@ import userRoutes from "./routes/user.route.js";
 import categoryRoutes from "./routes/category.route.js";
 import productRoutes from "./routes/product.route.js";
 import variantRoutes from "./routes/variant.route.js";
+import reportRoutes from "./routes/report.route.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -25,6 +26,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/variant", variantRoutes);
+app.use("/api/report", reportRoutes);
 
 app.get("/", (req, res) => {
     res.send("Servidor Corriendo exitosamente");
