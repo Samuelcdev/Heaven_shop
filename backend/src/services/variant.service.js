@@ -57,18 +57,10 @@ export const createVariant = async (payload) => {
     const {
         color_variant,
         size_variant,
-        sku_variant,
         price_variant,
         id_product,
         productName,
     } = payload;
-
-    const existing = await Variant.findOne({ where: { sku_variant } });
-    if (existing) {
-        const err = new Error("Variant SKU already exists");
-        err.status = 409;
-        throw err;
-    }
 
     let product = null;
     if (id_product) {
@@ -85,10 +77,32 @@ export const createVariant = async (payload) => {
         throw err;
     }
 
+    const generateSKU = (product, color, size) => {
+        const prefix = product.name_product
+            .substring(0, 3)
+            .toUpperCase()
+            .replace(/\s+/g, "");
+        const colorCode = (color || "GEN").substring(0, 3).toUpperCase();
+        const sizeCode = (size || "NA").substring(0, 3).toUpperCase();
+
+        return `${prefix}-${colorCode}-${sizeCode}-${product.id_product}`;
+    };
+
+    const finalSKU = generateSKU(product, color_variant, size_variant);
+
+    const existing = await Variant.findOne({
+        where: { sku_variant: finalSKU },
+    });
+    if (existing) {
+        const err = new Error("Variant SKU already exists");
+        err.status = 409;
+        throw err;
+    }
+
     const variant = await Variant.create({
         color_variant: color_variant,
         size_variant: size_variant,
-        sku_variant: sku_variant,
+        sku_variant: finalSKU,
         price_variant: price_variant,
         status_variant: "active",
         id_product: product.id_product,
