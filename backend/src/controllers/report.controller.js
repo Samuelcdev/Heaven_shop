@@ -12,3 +12,15 @@ export const getInventoryReport = async (req, res, next) => {
         next(err);
     }
 };
+
+export const generateInventoryPDF = async (req, res, next) => {
+    try {
+        const pdfPath = await reportService.generateInventoryPDF();
+        return res.status(200).json({
+            message: "Inventory report generated successfully",
+            pdfPath: pdfPath,
+        });
+    } catch (err) {
+        next(err);
+    }
+};

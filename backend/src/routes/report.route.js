@@ -12,4 +12,11 @@ router.get(
     reportCtrl.getInventoryReport
 );
 
+router.get(
+    "/inventory/pdf",
+    verifyToken,
+    permit("admin"),
+    reportCtrl.generateInventoryPDF
+);
+
 export default router;
