@@ -1,4 +1,4 @@
-import { FaTachometerAlt, FaBars } from "react-icons/fa";
+import { FaTachometerAlt, FaBars, FaBox } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 export default function Sidebar({ open, setOpen }) {
@@ -28,6 +28,10 @@ export default function Sidebar({ open, setOpen }) {
             <nav className="flex flex-col gap-3">
                 <Link to="/" className="btn btn-ghost justify-start">
                     <FaTachometerAlt /> {open && <span>Dashboard</span>}
+                </Link>
+                <Link to="/products" className="btn btn-ghost justify-start">
+                    <FaBox />
+                    {open && <span>Productos</span>}
                 </Link>
             </nav>
         </aside>

@@ -5,7 +5,6 @@ import PdfPrinter from "pdfmake";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { text } from "stream/consumers";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
