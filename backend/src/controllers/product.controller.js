@@ -24,10 +24,12 @@ export const getPaginatedProducts = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page || 1);
         const limit = parseInt(req.query.limit || 10);
+        const search = req.query.search || "";
 
         const productsPaginated = await productService.getPaginatedProduct(
             page,
-            limit
+            limit,
+            search
         );
         return res.status(200).json(productsPaginated);
     } catch (err) {
