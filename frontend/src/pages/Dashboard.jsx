@@ -5,9 +5,11 @@ import {
     FaLongArrowAltUp,
     FaBoxOpen,
 } from "react-icons/fa";
+import { useOutletContext } from "react-router-dom";
 import MainCard from "../components/MainCard";
 
-export default function Dashboard({ sidebarOpen }) {
+export default function Dashboard() {
+    const { sidebarOpen } = useOutletContext();
     const services = [
         {
             title: "Productos",
@@ -34,7 +36,6 @@ export default function Dashboard({ sidebarOpen }) {
 
     return (
         <div className="p-6 space-y-10">
-            {/* --- Header --- */}
             <header className="text-center md:text-left space-y-1">
                 <h1 className="text-3xl md:text-4xl font-bold text-base-content">
                     Panel de Administración
@@ -45,9 +46,7 @@ export default function Dashboard({ sidebarOpen }) {
                 </p>
             </header>
 
-            {/* --- Resumen de métricas --- */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Tarjeta Total Inventario */}
                 <article className="flex flex-col justify-between bg-gradient-to-br from-green-400/80 to-green-600/70 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1">
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-semibold uppercase tracking-wide">
@@ -63,7 +62,6 @@ export default function Dashboard({ sidebarOpen }) {
                     </span>
                 </article>
 
-                {/* Tarjeta Total de Productos */}
                 <article className="flex flex-col justify-between bg-gradient-to-br from-yellow-400/80 to-yellow-600/70 text-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-transform duration-300 hover:-translate-y-1">
                     <div className="flex justify-between items-center">
                         <h3 className="text-lg font-semibold uppercase tracking-wide">
@@ -78,7 +76,6 @@ export default function Dashboard({ sidebarOpen }) {
                 </article>
             </section>
 
-            {/* --- Sección de módulos --- */}
             <section
                 className={`grid gap-6 transition-all duration-300 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3`}
             >

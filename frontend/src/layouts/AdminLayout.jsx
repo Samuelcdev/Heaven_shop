@@ -1,7 +1,8 @@
-import { useState, cloneElement } from "react";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout() {
     const [open, setOpen] = useState(false);
 
     return (
@@ -9,7 +10,7 @@ export default function AdminLayout({ children }) {
             <Sidebar open={open} setOpen={setOpen} />
 
             <main className="flex-1 p-6">
-                {cloneElement(children, { sidebarOpen: open })}
+                <Outlet context={{ sidebarOpen: open }} />
             </main>
         </div>
     );
