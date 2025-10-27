@@ -9,11 +9,11 @@ export default function ProductsList() {
         totalItems,
         totalPages,
         page,
-        limit,
+        status,
         loading,
         error,
         setPage,
-        setLimit,
+        setStatus,
         setSearch,
         reload,
     } = useProducts({ page: 1, limit: 10 });
@@ -40,16 +40,15 @@ export default function ProductsList() {
                         />
                     </label>
                     <select
-                        value={limit}
+                        value={status}
                         onChange={(e) => {
-                            setLimit(Number(e.target.value));
+                            setStatus(e.target.value);
                             setPage(1);
                         }}
                         className="select"
                     >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={20}>20</option>
+                        <option value="active">Activo</option>
+                        <option value="inactive">Inactivo</option>
                     </select>
                 </div>
                 <button className="btn btn-sm" onClick={reload}>
@@ -80,14 +79,6 @@ export default function ProductsList() {
                             <tbody className="text-center">
                                 {items.map((p) => (
                                     <tr key={p.id_product ?? p.id}>
-                                        <td>
-                                            {p.image_product && (
-                                                <img
-                                                    src={p.image_product}
-                                                    alt=""
-                                                />
-                                            )}
-                                        </td>
                                         <td>{p.id_product ?? p.id}</td>
                                         <td>{p.name_product}</td>
                                         <td>{p.description_product}</td>
@@ -104,7 +95,20 @@ export default function ProductsList() {
                                             {p.stock_variant ??
                                                 (p.variants?.length || "-")}
                                         </td>
-                                        <td>{p.status_product}</td>
+                                        <td>
+                                            <span
+                                                className={`inline-block px-3 py-1 text-sm font-semibold rounded-full ${
+                                                    p.status_product ===
+                                                    "active"
+                                                        ? "bg-green-200 text-green-800"
+                                                        : "bg-red-200 text-red-800"
+                                                }`}
+                                            >
+                                                {p.status_product === "active"
+                                                    ? "Activo"
+                                                    : "Inactivo"}
+                                            </span>
+                                        </td>
                                         <td>
                                             <div className="flex justify-center gap-2">
                                                 <button

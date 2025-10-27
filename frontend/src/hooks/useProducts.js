@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import * as productsApi from "../../api/products.api";
 
-export default function useProducts(initial = { page: 1, limit: 10 }) {
+export default function useProducts(initial = { page: 1 }) {
     const [items, setItems] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(initial.page);
-    const [limit, setLimit] = useState(initial.limit);
+    const [status, setStatus] = useState("");
     const [search, setSearch] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -18,8 +18,8 @@ export default function useProducts(initial = { page: 1, limit: 10 }) {
         try {
             const data = await productsApi.fetchProducts({
                 page,
-                limit,
                 search,
+                status,
             });
 
             if (Array.isArray(data)) {
@@ -30,7 +30,7 @@ export default function useProducts(initial = { page: 1, limit: 10 }) {
                 setItems(data.products || data.rows || data.items || []);
                 setTotalItems(data.total || data.totalProducts || 0);
                 setTotalPages(
-                    data.totalPages || Math.ceil((data.total || 0) / limit)
+                    data.totalPages || Math.ceil((data.total || 0) / 10)
                 );
             }
         } catch (err) {
@@ -38,7 +38,7 @@ export default function useProducts(initial = { page: 1, limit: 10 }) {
         } finally {
             setLoading(false);
         }
-    }, [page, limit, search]);
+    }, [page, search, status]);
 
     useEffect(() => {
         load();
@@ -49,11 +49,11 @@ export default function useProducts(initial = { page: 1, limit: 10 }) {
         totalItems,
         totalPages,
         page,
-        limit,
+        status,
         loading,
         error,
         setPage,
-        setLimit,
+        setStatus,
         setSearch,
         reload: load,
     };

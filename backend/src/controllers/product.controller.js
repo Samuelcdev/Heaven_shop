@@ -23,13 +23,13 @@ export const getProductByPk = async (req, res, next) => {
 export const getPaginatedProducts = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page || 1);
-        const limit = parseInt(req.query.limit || 10);
         const search = req.query.search || "";
+        const status = req.query.status || "";
 
         const productsPaginated = await productService.getPaginatedProduct(
             page,
-            limit,
-            search
+            search,
+            status
         );
         return res.status(200).json(productsPaginated);
     } catch (err) {

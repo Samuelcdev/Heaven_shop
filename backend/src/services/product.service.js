@@ -21,11 +21,19 @@ export const getProductById = async (id_product) => {
 
 export const getPaginatedProduct = async (
     page = 1,
-    limit = 10,
-    search = ""
+    search = "",
+    status = ""
 ) => {
-    const offset = (page - 1) * limit;
-    const where = search ? { name_product: { [Op.like]: `%${search}%` } } : {};
+    const offset = (page - 1) * 10;
+    const where = {};
+
+    if (status) {
+        where.status_product = { [Op.eq]: status };
+    }
+
+    if (search) {
+        where.name_product = { [Op.like]: `%${search}%` };
+    }
 
     const { count, rows: products } = await Product.findAndCountAll({
         attributes: [
@@ -41,7 +49,7 @@ export const getPaginatedProduct = async (
             as: "category",
             attributes: ["name_category"],
         },
-        limit,
+        limit: 10,
         offset,
         where,
         order: [["id_product", "ASC"]],
@@ -49,7 +57,7 @@ export const getPaginatedProduct = async (
 
     return {
         totalProducts: count,
-        totalPages: Math.ceil(count / limit),
+        totalPages: Math.ceil(count / 10),
         currentPage: page,
         products,
     };

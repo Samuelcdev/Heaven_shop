@@ -2,15 +2,12 @@ import api from "./axios.js";
 
 export const fetchProducts = async ({
     page = 1,
-    limit = 10,
     search = "",
-    category,
-    status,
+    status = "",
 } = {}) => {
-    const params = { page, limit };
+    const params = { page };
     if (search) params.search = search;
-    if (category) params.category = category;
     if (status) params.status = status;
-    const res = await api.get("/product/", { params });
+    const res = await api.get("/product/paginated", { params });
     return res.data;
 };
