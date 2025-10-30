@@ -1,5 +1,6 @@
 import { FaSearch, FaPencilRuler, FaRegTrashAlt } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import useDeleteProduct from "../hooks/useDeleteProduct.js";
 import useProducts from "../hooks/useProducts.js";
 import ProductCard from "./ProductCard.jsx";
 
@@ -18,6 +19,11 @@ export default function ProductsList() {
         reload,
     } = useProducts({ page: 1, limit: 10 });
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const { deleteProduct: handleDelete, loading: deleting } = useDeleteProduct(
+        {
+            onSuccess: reload,
+        }
+    );
 
     useEffect(() => {
         document.title = `Productos ${totalItems}`;
@@ -119,7 +125,15 @@ export default function ProductsList() {
                                                 >
                                                     <FaPencilRuler />
                                                 </button>
-                                                <button className="btn btn-error">
+                                                <button
+                                                    className="btn btn-error"
+                                                    onClick={() =>
+                                                        handleDelete(
+                                                            p.id_product
+                                                        )
+                                                    }
+                                                    disabled={deleting}
+                                                >
                                                     <FaRegTrashAlt />
                                                 </button>
                                             </div>

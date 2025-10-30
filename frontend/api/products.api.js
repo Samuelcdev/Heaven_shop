@@ -11,3 +11,8 @@ export const fetchProducts = async ({
     const res = await api.get("/product/paginated", { params });
     return res.data;
 };
+
+export const deleteProduct = async (id_product) => {
+    const res = await api.delete(`/product/${id_product}`);
+    return res.data;
+};
