@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import * as productsApi from "../../api/products.api";
+import { fetchProducts } from "../../api/products.api";
 
 export default function useProducts(initial = { page: 1 }) {
     const [items, setItems] = useState([]);
@@ -16,7 +16,7 @@ export default function useProducts(initial = { page: 1 }) {
         setError(null);
 
         try {
-            const data = await productsApi.fetchProducts({
+            const data = await fetchProducts({
                 page,
                 search,
                 status,

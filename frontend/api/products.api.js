@@ -12,6 +12,11 @@ export const fetchProducts = async ({
     return res.data;
 };
 
+export const createProduct = async (productData) => {
+    const res = await api.post("/product", productData);
+    return res.data;
+};
+
 export const deleteProduct = async (id_product) => {
     const res = await api.delete(`/product/${id_product}`);
     return res.data;
