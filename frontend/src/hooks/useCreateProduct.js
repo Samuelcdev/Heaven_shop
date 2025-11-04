@@ -2,30 +2,47 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { createProduct } from "../../api/products.api";
 
-export default function useCreateProduct({ onSuccess } = {}) {
+export default function useCreateProduct({ onSuccess }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleCreate = async (productData) => {
+    const handleCreate = async (data) => {
+        const result = await Swal.fire({
+            title: "¿Crear Producto?",
+            text: "Se creara un nuevo producto en el sistema",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Si, crear producto",
+            cancelButtonText: "No, cancelar",
+        });
+
+        if (!result.isConfirmed) return;
+
         try {
             setLoading(true);
-            const data = await createProduct(productData);
+            setError(null);
 
-            Swal.fire({
-                icon: "success",
-                title: "Producto creado",
-                text: "El producto ha sido creado correctamente",
-            });
+            await createProduct(data);
 
-            if (onSuccess) onSuccess(data);
+            Swal.fire(
+                "Creado",
+                "El producto ha sido creado correctamente",
+                "success"
+            );
+
+            if (onSuccess) onSuccess();
         } catch (err) {
-            console.err("Error al crear el producto");
+            console.error("Error al crear el producto", err);
             setError(err);
-            Swal.fire("Error", "Error al crear el producto", "error");
+            Swal.fire("Error", "El producto no se pudo crear", "error");
         } finally {
             setLoading(false);
         }
     };
 
-    return { createProduct: handleCreate, loading, error };
+    return {
+        createProduct: handleCreate,
+        loading,
+        error,
+    };
 }
