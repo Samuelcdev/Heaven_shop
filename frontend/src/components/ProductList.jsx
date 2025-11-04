@@ -1,8 +1,15 @@
-import { FaSearch, FaPencilRuler, FaRegTrashAlt } from "react-icons/fa";
+import {
+    FaSearch,
+    FaPencilRuler,
+    FaRegTrashAlt,
+    FaPlus,
+    FaSync,
+} from "react-icons/fa";
 import { useEffect, useState } from "react";
 import useDeleteProduct from "../hooks/useDeleteProduct.js";
 import useProducts from "../hooks/useProducts.js";
 import ProductCard from "./ProductCard.jsx";
+import ProductForm from "./productForm.jsx";
 
 export default function ProductsList() {
     const {
@@ -19,6 +26,7 @@ export default function ProductsList() {
         reload,
     } = useProducts({ page: 1, limit: 10 });
     const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showCreate, setShowCreate] = useState(false);
     const { deleteProduct: handleDelete, loading: deleting } = useDeleteProduct(
         {
             onSuccess: reload,
@@ -57,9 +65,19 @@ export default function ProductsList() {
                         <option value="inactive">Inactivo</option>
                     </select>
                 </div>
-                <button className="btn btn-sm" onClick={reload}>
-                    Actualizar
-                </button>
+                <div className="flex gap-3">
+                    <button
+                        className="btn btn-md bg-blue-400/50"
+                        onClick={() => setShowCreate(true)}
+                    >
+                        <FaPlus />
+                        Crear producto
+                    </button>
+                    <button className="btn btn-md" onClick={reload}>
+                        <FaSync />
+                        Actualizar
+                    </button>
+                </div>
             </div>
 
             {loading ? (
@@ -168,6 +186,13 @@ export default function ProductsList() {
                 <ProductCard
                     product={selectedProduct}
                     onClose={() => setSelectedProduct(null)}
+                />
+            )}
+
+            {showCreate && (
+                <ProductForm
+                    onClose={() => setShowCreate(false)}
+                    onCreated={reload}
                 />
             )}
         </div>
