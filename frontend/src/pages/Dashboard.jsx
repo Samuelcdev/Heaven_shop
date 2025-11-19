@@ -7,9 +7,11 @@ import {
 } from "react-icons/fa";
 import { useOutletContext } from "react-router-dom";
 import MainCard from "../components/MainCard";
+import useInventoryTotalValue from "../hooks/useTotalValueInventory";
 
 export default function Dashboard() {
     const { sidebarOpen } = useOutletContext();
+    const {value, reload} = useInventoryTotalValue();
     const services = [
         {
             title: "Productos",
@@ -55,7 +57,7 @@ export default function Dashboard() {
                         <FaLongArrowAltUp className="text-3xl opacity-80" />
                     </div>
                     <p className="text-5xl md:text-6xl font-bold mt-4">
-                        $1’000.000
+                        {"$ " + new Intl.NumberFormat().format(value)}
                     </p>
                     <span className="text-sm opacity-80 mt-2">
                         Última actualización: Hoy
