@@ -4,6 +4,8 @@ import RefreshToken from "./RefreshToken.js";
 import Category from "./Category.js";
 import Product from "./Product.js";
 import Variant from "./Variant.js";
+import Stock from "./Stock.js";
+import InventoryHistory from "./InventoryHistory.js";
 
 // User ↔ Role
 Role.hasMany(User, {
@@ -46,6 +48,21 @@ Product.hasMany(Variant, {
 Variant.belongsTo(Product, {
     foreignKey: "id_product",
     as: "product",
+});
+
+Variant.hasOne(Stock, {
+    foreignKey: "id_variant",
+    as: "stock",
+});
+
+Stock.belongsTo(Variant, {
+    foreignKey: "id_variant",
+    as: "variant",
+});
+
+InventoryHistory.belongsTo(Variant, {
+    foreignKey: "id_variant",
+    as: "variant",
 });
 
 export { User, Role, RefreshToken, Product, Category, Variant };
