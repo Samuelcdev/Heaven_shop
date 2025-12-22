@@ -10,6 +10,7 @@ import categoryRoutes from "./routes/category.route.js";
 import productRoutes from "./routes/product.route.js";
 import variantRoutes from "./routes/variant.route.js";
 import reportRoutes from "./routes/report.route.js";
+import InventoryRoutes from "./routes/inventoryHistory.route.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 
 dotenv.config();
@@ -27,6 +28,7 @@ app.use("/api/category", categoryRoutes);
 app.use("/api/product", productRoutes);
 app.use("/api/variant", variantRoutes);
 app.use("/api/report", reportRoutes);
+app.use("/api/inventory-history", InventoryRoutes);
 
 app.get("/", (req, res) => {
     res.send("Servidor Corriendo exitosamente");
