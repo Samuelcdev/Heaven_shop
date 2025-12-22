@@ -134,3 +134,18 @@ CREATE TABLE `stocks` (
 ) ENGINE=InnoDB
 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `inventory_history`;
+CREATE TABLE `inventory_history` (
+  `id_history` INT NOT NULL AUTO_INCREMENT,
+  `id_variant` INT NOT NULL,
+  `quantity` INT NOT NULL,
+  `value` DECIMAL(10, 2) NOT NULL,
+  `type` ENUM('in', 'out') DEFAULT 'in',
+  `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY(`id_history`),
+
+  CONSTRAINT `fk_history_variant`
+    FOREIGN KEY (`id_variant`)
+    REFERENCES `variants` (`id_variant`)
+    ON DELETE CASCADE
+)
