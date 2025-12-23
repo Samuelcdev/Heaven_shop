@@ -3,6 +3,7 @@ import * as inventoryHistoryCtrl from "../controllers/inventory.controller.js";
 
 const router = Router();
 
+router.post("/", inventoryHistoryCtrl.createInventoryMovement);
 router.get("/monthly", inventoryHistoryCtrl.getMonthlyHistory);
 
 export default router;
