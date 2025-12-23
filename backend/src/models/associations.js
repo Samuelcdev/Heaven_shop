@@ -60,6 +60,11 @@ Stock.belongsTo(Variant, {
     as: "variant",
 });
 
+Variant.hasMany(InventoryHistory, {
+    foreignKey: "id_variant",
+    as: "history",
+});
+
 InventoryHistory.belongsTo(Variant, {
     foreignKey: "id_variant",
     as: "variant",
